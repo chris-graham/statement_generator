@@ -1,20 +1,22 @@
 import boto3
-import botocore
 import datetime
 import os
 import pandas as pd
-import psycopg2
-from sqlalchemy import *
+import sqlalchemy as sq
 
 BUCKET_NAME = 'vervoer-statement-generator-backup'
 DATA_PATH = '/home/ubuntu/projects/statement_generator/data/ezpass/'
 
-# Cleanup data from CSV file
+
 def transform_ezpass_data(filename):
+    """
+    Cleanup data from CSV file
+    """
     posting_dates = []
     transaction_dates = []
     df = pd.read_csv(filename)
-    df.columns = df.columns.str.lower().str.replace(' ', '_').str.replace('/', '_')
+    df.columns = df.columns.str.lower().str.replace(' ', '_').str.replace('/',
+                                                                          '_')
 
     # Format addresses in YYYYMMDD format
     for posting_date in df['posting_date']:
@@ -27,18 +29,19 @@ def transform_ezpass_data(filename):
 
     # Replace '-' with None
     df = df.replace('-', df.replace(['-'], [None]))
-    
+
     return df
 
-# Convert US date format to database friendly format
+
 def convert_date_format(date):
+    """
+    Convert US date format to database friendly format
+    """
     return datetime.datetime.strptime(date, '%m/%d/%Y').strftime('%Y/%m/%d')
 
-def delete_file(filepath):
-    pass
 
 # Connect to database
-engine = create_engine('postgresql+psycopg2:///vervoer')
+engine = sq.create_engine('postgresql+psycopg2:///vervoer')
 # Get all data filenames from data directory
 filenames = os.listdir(DATA_PATH)
 
