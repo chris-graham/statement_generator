@@ -3,3 +3,5 @@
 publickey.cer
 xero_credentials.txt
 xero.pem
+src/__pycache__/
+/test_data/
