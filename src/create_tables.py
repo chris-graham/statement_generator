@@ -32,7 +32,7 @@ CREATE TABLE xero(
     id serial PRIMARY KEY,
     contact_id varchar(50),
     name varchar(100),
-    input_date datetime,
+    input_date timestamp,
     balance money)
 """)
 
