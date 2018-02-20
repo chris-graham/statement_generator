@@ -36,5 +36,16 @@ CREATE TABLE xero(
     balance money)
 """)
 
+cur.execute('CREATE TYPE transaction_type AS ENUM (\'debit\', \'credit\')')
+
+cur.execute('DROP TABLE IF EXISTS driver_deposits')
+cur.execute("""
+CREATE TABLE driver_deposits(
+    id serial PRIMARY KEY,
+    transaction_date timestamp,
+    name varchar(100),
+    debit_or_credit transaction_type)
+""")
+
 conn.commit()
 conn.close()
